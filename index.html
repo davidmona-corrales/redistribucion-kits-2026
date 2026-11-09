@@ -199,17 +199,9 @@ footer{color:var(--muted);font-size:.82rem;text-align:center;margin-top:10px}
       <li><b>Nariño → Caquetá</b>: entre vecinos.</li>
       <li><b>Putumayo → Amazonas y Guainía</b>, pasando por Bogotá. Putumayo reportó el 6 de noviembre que le sobran unos 320 de cada artículo «para devolución», así que puede mandarlos a quien los necesita en vez de devolverlos.</li>
     </ul></li>
-  <li><b>Pedir ya a la bodega central lo que no alcanza en el país</b>: tulas, kits con morral y tapas de balde. Los borradores ya alcanzan con lo que sobra. Eso no se resuelve con ningún traslado.</li>
+  <li><b>Pedir ya a la bodega central lo que no alcanza en el país</b>: tulas, kits con morral y tapas de balde. Eso no se resuelve con ningún traslado. (Los borradores, en cambio, ya alcanzan con lo que sobra.)</li>
   <li><b>Confirmar antes de despachar.</b> Sobre todo con <b>Tolima Centro</b>: las cifras de las tres delegaciones de Tolima se repartieron con un cálculo provisional, a la espera de sus inventarios. Si Tolima Centro no tiene esos sobrantes, Valle queda sin cubrir. Con Cauca, Meta y Nariño basta un «sí, lo tenemos».</li>
-  <li><b>Mirar las fechas.</b> Varias delegaciones entregan el 7 u 8 de noviembre, y un envío entre delegaciones ya no les llega para esa fecha; les sirve para sus eventos siguientes. Las que más ganan son las que entregan del 11 en adelante:
-    <ul>
-      <li>Boyacá (11 de noviembre)</li>
-      <li>Caquetá (14)</li>
-      <li>Antioquia (15)</li>
-      <li>La Guajira y Arauca (21)</li>
-      <li>San Andrés (22)</li>
-      <li>Guainía y Amazonas (28)</li>
-    </ul></li>
+  <li><b>Mirar las fechas.</b> Un envío entre delegaciones tarda varios días, así que sirve sobre todo para las entregas de la segunda mitad de noviembre. En el paso 3, cada envío dice cuándo entrega la delegación que lo recibe; los marcados «entrega muy pronto» quizá no alcancen.</li>
   <li><b>San Andrés, Guainía y Amazonas: juntar todo en Bogotá</b> y hacer un solo despacho aéreo. Los tres entregan a finales de noviembre (San Andrés el 22, Guainía y Amazonas el 28), así que hay tiempo de consolidar.</li>
 </ol>
 </section>
@@ -302,6 +294,7 @@ var CORTO = {'Cuadernos cuadriculados':'Cuadernos cuadriculados','Cuadernos raya
   'Plastilina':'Plastilinas','Kits con morral':'Kits con morral','Cartucheras':'Cartucheras','Baldes':'Baldes'};
 var MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 var HOY = '2026-11-09';
+var MUYPRONTO = (function(){ var d=new Date(HOY+'T12:00:00'); d.setDate(d.getDate()+4); return d.toISOString().slice(0,10); })();
 
 function nf(n){ return Math.round(n).toLocaleString('es-CO'); }
 function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
@@ -533,7 +526,7 @@ function pintar(){
     var it=ARTS.filter(function(a){return x.items[a]&&(!art||a===art);}).map(function(a){
       return '<span class="chip">'+CORTO[a]+' <b>'+nf(x.items[a])+'</b></span>'; }).join('');
     var tags=(AEREO[x.a]||AEREO[x.de]?'<span class="tag">pasa por Bogotá</span>':'')+
-      (dest.iso&&dest.iso<HOY?'<span class="tag">su fecha ya pasó</span>':dest.iso&&dest.iso<='2026-11-08'?'<span class="tag">entrega muy pronto</span>':'');
+      (dest.iso&&dest.iso<HOY?'<span class="tag">su fecha ya pasó</span>':dest.iso&&dest.iso<=MUYPRONTO?'<span class="tag">entrega muy pronto</span>':'');
     h+='<tr><td class="l nro">'+x.nro+'</td><td class="l ruta"><b>'+esc(x.de)+'</b> → <b>'+esc(x.a)+'</b><br><span class="muted small">≈ '+nf(x.km)+' km · '+esc(x.a)+' entrega el '+fechaCorta(dest.fecha)+'</span><br>'+tags+'</td><td><b>'+nf(u)+'</b></td><td class="l">'+it+'</td></tr>';
   });
   if(!env.length) h+='<tr><td class="l" colspan="4">Ningún envío de este artículo con esta forma de repartir.</td></tr>';
